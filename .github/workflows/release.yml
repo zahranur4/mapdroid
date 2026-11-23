@@ -26,20 +26,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
 
-      - name: Ensure Gradle Wrapper & Permissions
-        run: |
-          if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
-            gradle wrapper --gradle-version 8.7
-          fi
-          chmod +x gradlew
+      - name: Make Gradlew Executable
+        run: chmod +x gradlew
 
       - name: Build Release APK
         run: ./gradlew assembleRelease --stacktrace
@@ -87,7 +80,6 @@ jobs:
             - **Versi Tag**: `${{ steps.prep.outputs.tag }}`
             - **Commit SHA**: `${{ github.sha }}`
             - **Branch**: `${{ github.ref_name }}`
-            - **Waktu Build**: ${{ github.event.head_commit.timestamp || github.run_id }}
             - **Tipe Build**: Release APK (Signed dengan Android keystore, siap di-install)
             - **Engine Peta**: MapLibre Native SDK (OpenGL / Vulkan)
 
