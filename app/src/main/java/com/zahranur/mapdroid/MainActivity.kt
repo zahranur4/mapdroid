@@ -109,10 +109,9 @@ class MainActivity : AppCompatActivity() {
     private fun loadMapStyle(styleUrl: String) {
         mapLibreMap?.setStyle(styleUrl) { style ->
             // Move camera to initial position
-            mapLibreMap?.cameraPosition = CameraPosition.Builder()
-                .target(defaultCenter)
-                .zoom(12.0)
-                .build()
+            mapLibreMap?.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(defaultCenter, 12.0)
+            )
 
             // Add default marker on Monas Jakarta
             activeMarker?.let { mapLibreMap?.removeMarker(it) }
