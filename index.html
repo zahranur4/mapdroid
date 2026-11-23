@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapdroid - Aplikasi Android Peta Vektor MapLibre</title>
+    <meta name="description" content="Aplikasi peta vektor Android modern menggunakan MapLibre Native SDK dengan unduhan APK langsung dan rilis otomatis.">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺️</text></svg>">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans flex flex-col min-h-screen">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-xl font-bold bg-gradient-to-r from-brand-700 to-brand-500 bg-clip-text text-transparent">Mapdroid</span>
+                    <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-xs font-semibold bg-brand-50 text-brand-700 rounded-md border border-brand-200">MapLibre Native</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
+                <a href="#fitur" class="hover:text-brand-600 transition-colors">Fitur</a>
+                <a href="#panduan" class="hover:text-brand-600 transition-colors">Panduan Instalasi</a>
+                <a href="#developer" class="hover:text-brand-600 transition-colors">Panduan Pengembang</a>
+                <a href="https://github.com/zahranur4/mapdroid" target="_blank" rel="noopener noreferrer" class="hover:text-brand-600 transition-colors flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                    </svg>
+                    GitHub
+                </a>
+            </nav>
+
+            <!-- Download Button in Navbar -->
+            <div>
+                <a id="btnDownloadNav" href="https://github.com/zahranur4/mapdroid/releases/latest/download/mapdroid.apk" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-brand-600 rounded-lg hover:bg-brand-700 shadow-sm shadow-brand-500/30 transition-all hover:scale-[1.02]">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>Unduh APK</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+
+        <!-- Hero Section -->
+        <section class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28">
+            <div class="absolute inset-0 -z-10 bg-[radial-gradient(45rem_50rem_at_top,theme(colors.brand.100),theme(colors.slate.50))] opacity-60"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <!-- Status Badge -->
+                    <div id="releaseStatusBadge" class="inline-flex items-center mb-6">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-800 border border-brand-200">
+                            <span class="w-2 h-2 mr-1.5 rounded-full bg-brand-600 animate-pulse"></span>
+                            MapLibre Native Android SDK Ready
+                        </span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                        Eksplorasi Peta Vektor Tanpa Batas dengan <span class="bg-gradient-to-r from-brand-600 to-indigo-600 bg-clip-text text-transparent">Mapdroid</span>
+                    </h1>
+
+                    <p class="mt-6 text-lg sm:text-xl text-slate-600 leading-relaxed">
+                        Aplikasi Android peta open-source bertenaga <strong>MapLibre Native</strong>. Nikmati rendering peta vektor 60 FPS, multi-style, pelacakan GPS, dan integrasi tile bebas lisensi gratis.
+                    </p>
+
+                    <!-- Primary Download CTA -->
+                    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <a id="btnDownloadHero" href="https://github.com/zahranur4/mapdroid/releases/latest/download/mapdroid.apk" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 text-base font-bold text-white bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 rounded-xl shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993s-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993s-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 7.7812 13.8533 7.3077 12 7.3077s-3.5902.4735-5.1368 1.642L4.8409 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.152 4.0268l1.9972 3.4592C2.6889 10.9577 0 14.1557 0 17.9615h24c0-3.8058-2.6889-7.0038-6.1185-9.1824"/>
+                            </svg>
+                            <div class="text-left">
+                                <div class="text-xs uppercase tracking-wider font-semibold opacity-90">Unduh Langsung</div>
+                                <div class="text-lg leading-none mt-0.5">Unduh Mapdroid APK</div>
+                            </div>
+                        </a>
+
+                        <a href="https://github.com/zahranur4/mapdroid" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 rounded-xl shadow-sm transition-all">
+                            <svg class="w-5 h-5 text-slate-700" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                            </svg>
+                            <span>Lihat Kode di GitHub</span>
+                        </a>
+                    </div>
+
+                    <!-- Meta info badges -->
+                    <div class="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-500">
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Versi: <strong id="heroVersionTag" class="text-slate-700">v1.0.0</strong>
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Format: <strong class="text-slate-700">Android APK (.apk)</strong>
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Ukuran: <strong id="heroFileSize" class="text-slate-700">Siap Diunduh</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Live Release Card (Powered by croot.js) -->
+                <div class="mt-12 max-w-2xl mx-auto bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-slate-900 to-slate-800 px-6 py-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></div>
+                            <span class="text-sm font-semibold text-slate-200">GitHub Release Terakhir</span>
+                        </div>
+                        <span id="cardVersionTag" class="text-xs font-mono font-bold px-2.5 py-1 bg-brand-500/20 text-brand-300 rounded border border-brand-400/30">
+                            Memuat...
+                        </span>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-6 border-b border-slate-100 text-sm">
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase tracking-wider block">Nama Rilis</span>
+                                <span id="cardReleaseName" class="font-semibold text-slate-800">Menghubungkan ke API...</span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase tracking-wider block">Waktu Terbit</span>
+                                <span id="cardPublishedDate" class="font-semibold text-slate-800">-</span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase tracking-wider block">Nama Berkas APK</span>
+                                <span id="cardAssetName" class="font-mono font-semibold text-brand-600">mapdroid.apk</span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase tracking-wider block">Status Unduhan</span>
+                                <span id="cardDownloadCount" class="font-semibold text-slate-800">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Release Notes / Details -->
+                        <div id="releaseNotesSection" class="mt-4 pt-2">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Catatan Rilis & Fitur:</h4>
+                            <div id="cardReleaseNotes" class="text-sm text-slate-600 bg-slate-50 p-3.5 rounded-lg border border-slate-200 font-sans leading-relaxed">
+                                Memuat catatan rilis...
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex items-center justify-between gap-4">
+                            <a id="btnDownloadCard" href="https://github.com/zahranur4/mapdroid/releases/latest/download/mapdroid.apk" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-lg shadow transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                                <span>Unduh APK Rilis Ini</span>
+                            </a>
+                            <a id="linkViewReleases" href="https://github.com/zahranur4/mapdroid/releases" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 text-slate-600 hover:text-slate-900 border border-slate-300 hover:bg-slate-50 rounded-lg text-sm font-semibold transition-colors">
+                                Semua Rilis
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="fitur" class="py-16 bg-white border-t border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-bold text-brand-600 tracking-widest uppercase">Keunggulan Aplikasi</h2>
+                    <p class="mt-2 text-3xl font-extrabold text-slate-900 sm:text-4xl">Fitur Utama Mapdroid</p>
+                    <p class="mt-4 text-base text-slate-600">Dirancang khusus untuk menghadirkan performa rendering peta vektor kelas dunia yang fleksibel dan hemat daya.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:shadow-lg hover:border-brand-200 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Engine MapLibre Native</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Menggunakan runtime C++/OpenGL/Vulkan MapLibre untuk rendering tile vektor super lancar pada 60 FPS tanpa jeda.
+                        </p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:shadow-lg hover:border-brand-200 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Dukungan Multi-Style</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Dapat beralih secara instan antara gaya OpenFreeMap Liberty, Positron (Light), Bright, dan MapLibre Demotiles.
+                        </p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:shadow-lg hover:border-brand-200 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Pelacakan Posisi GPS</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Dilengkapi tombol "Lokasi Saya" untuk mendeteksi posisi perangkat secara real-time dan orientasi kompas arah utara.
+                        </p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:shadow-lg hover:border-brand-200 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Pin & Marker Interaktif</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Ketuk lama di mana saja pada peta untuk menaruh pin kustom lengkap dengan informasi koordinat latitude dan longitude.
+                        </p>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:shadow-lg hover:border-brand-200 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Auto Tag & Release CI/CD</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Setiap push ke branch main otomatis menjalankan GitHub Actions workflow untuk mengkompilasi APK dan membuat GitHub Release baru.
+                        </p>
+                    </div>
+
+                    <!-- Feature 6 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:shadow-lg hover:border-brand-200 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Bebas Biaya Lisensi & API Key</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            100% open-source. Menggunakan protokol OpenStreetMap dan OpenFreeMap tanpa batasan kuota berbayar atau registrasi kartu kredit.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Installation Guide Section -->
+        <section id="panduan" class="py-16 bg-slate-50 border-t border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-bold text-brand-600 tracking-widest uppercase">Petunjuk Penggunaan</h2>
+                    <p class="mt-2 text-3xl font-extrabold text-slate-900 sm:text-4xl">Panduan Instalasi & Penggunaan</p>
+                    <p class="mt-4 text-base text-slate-600">Langkah mudah mengunduh, memasang, dan menjalankan aplikasi Mapdroid di HP Android Anda.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Step 1 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 relative flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-full bg-brand-600 text-white font-bold flex items-center justify-center text-lg mb-4">1</div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Unduh Berkas APK</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Klik tombol <strong>"Unduh APK"</strong> di halaman ini atau unduh langsung dari tab GitHub Release. File akan tersimpan di folder Download.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100">
+                            <span class="text-xs text-brand-600 font-semibold flex items-center gap-1">
+                                Berkas: mapdroid.apk
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 relative flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-full bg-brand-600 text-white font-bold flex items-center justify-center text-lg mb-4">2</div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Izinkan Sumber Tidak Dikenal</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Buka file APK. Jika Android memunculkan peringatan keamanan, buka <em>Pengaturan</em> dan aktifkan <em>"Izinkan instalasi dari sumber ini"</em> (Install Unknown Apps).
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100">
+                            <span class="text-xs text-slate-500 font-semibold flex items-center gap-1">
+                                Standar instalasi manual APK Android
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 relative flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-full bg-brand-600 text-white font-bold flex items-center justify-center text-lg mb-4">3</div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Pasang (Install) Aplikasi</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Tekan tombol <strong>"Pasang" (Install)</strong> dan tunggu proses hingga selesai. Setelah itu, tekan <strong>"Buka"</strong>.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100">
+                            <span class="text-xs text-emerald-600 font-semibold flex items-center gap-1">
+                                Signed dengan Android keystore
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 relative flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-full bg-brand-600 text-white font-bold flex items-center justify-center text-lg mb-4">4</div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Mulai Eksplorasi Peta</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Berikan izin akses lokasi GPS jika diminta. Gunakan tombol gaya peta untuk mengganti tampilan, tombol kompas untuk arah Utara, dan ketuk lama untuk menaruh pin.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100">
+                            <span class="text-xs text-brand-600 font-semibold flex items-center gap-1">
+                                Siap digunakan!
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Developer & CI/CD Guide Section -->
+        <section id="developer" class="py-16 bg-white border-t border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-bold text-brand-600 tracking-widest uppercase">Dokumentasi Teknis</h2>
+                    <p class="mt-2 text-3xl font-extrabold text-slate-900 sm:text-4xl">Panduan Pengembang & CI/CD</p>
+                    <p class="mt-4 text-base text-slate-600">Arsitektur proyek, otomatisasi build GitHub Actions, dan cara kompilasi APK secara lokal.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Workflow Info -->
+                    <div class="bg-slate-900 text-slate-100 p-6 sm:p-8 rounded-2xl border border-slate-800 shadow-xl">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold">GitHub Actions Workflow</h3>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-4 leading-relaxed">
+                            Alur kerja otomatis tersimpan di <code>.github/workflows/release.yml</code>. Setiap kali branch <code>main</code> menerima push, proses berikut berjalan:
+                        </p>
+                        <ol class="list-decimal list-inside space-y-2 text-sm text-slate-300">
+                            <li><span class="text-brand-400 font-semibold">Checkout repo</span> dengan seluruh commit history.</li>
+                            <li><span class="text-brand-400 font-semibold">Setup Java JDK 17</span> (Eclipse Temurin) & Android SDK.</li>
+                            <li><span class="text-brand-400 font-semibold">Setup Gradle 8.7</span> & membuat Gradle Wrapper otomatis jika belum ada.</li>
+                            <li><span class="text-brand-400 font-semibold">Build Release APK</span> menggunakan <code>./gradlew assembleRelease</code>.</li>
+                            <li><span class="text-brand-400 font-semibold">Auto-Tag</span> format <code>v1.0.&lt;run_number&gt;</code>.</li>
+                            <li><span class="text-brand-400 font-semibold">Create GitHub Release</span> dan unggah <code>mapdroid.apk</code> untuk langsung diunduh.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Local Build Commands -->
+                    <div class="bg-slate-50 p-6 sm:p-8 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center space-x-3 mb-4">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-900">Perintah Kompilasi Lokal</h3>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-4">
+                                Anda dapat mengkompilasi APK langsung di komputer lokal menggunakan Gradle Wrapper:
+                            </p>
+                            
+                            <!-- Bash Snippet -->
+                            <div class="bg-slate-900 text-slate-100 rounded-xl p-4 font-mono text-xs overflow-x-auto mb-4">
+                                <div class="text-slate-400 mb-1"># Linux / macOS</div>
+                                <div class="text-emerald-400">./gradlew assembleRelease</div>
+                                <div class="text-slate-400 mt-3 mb-1"># Windows PowerShell / CMD</div>
+                                <div class="text-emerald-400">.\gradlew.bat assembleRelease</div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-200 text-xs text-slate-500">
+                            Lokasi output APK: <code>app/build/outputs/apk/release/app-release.apk</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm">
+                    M
+                </div>
+                <div>
+                    <span class="text-white font-bold text-base">Mapdroid</span>
+                    <p class="text-xs text-slate-500">Dibuat menggunakan MapLibre Native SDK & croot.js</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-6 text-sm">
+                <a href="https://maplibre.org" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">MapLibre.org</a>
+                <a href="https://openfreemap.org" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">OpenFreeMap</a>
+                <a href="https://github.com/zahranur4/mapdroid" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub Repo</a>
+            </div>
+
+            <div class="text-xs text-slate-500">
+                &copy; 2026 Mapdroid Project. Dilindungi Lisensi Open-Source.
+            </div>
+        </div>
+    </footer>
+
+    <!-- croot.js ES6 Script Module -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

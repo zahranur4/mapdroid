@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Mapdroid</string>
+    <string name="app_subtitle">Peta Vektor MapLibre Android</string>
+    <string name="btn_styles">Gaya Peta</string>
+    <string name="btn_location">Lokasi Saya</string>
+    <string name="btn_zoom_in">Perbesar</string>
+    <string name="btn_zoom_out">Perkecil</string>
+    <string name="btn_compass">Arah Utara</string>
+    <string name="default_coords">Lat: -6.1754 | Lng: 106.8272 | Zoom: 12.0</string>
+</resources>

@@ -1,0 +1,106 @@
+name: Build & Auto Release Mapdroid APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build APK & Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Ensure Gradle Wrapper & Permissions
+        run: |
+          if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
+            gradle wrapper --gradle-version 8.7
+          fi
+          chmod +x gradlew
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --stacktrace
+
+      - name: Prepare Release Artifacts and Tag
+        id: prep
+        run: |
+          # Generate auto-incrementing tag based on run number
+          TAG_NAME="v1.0.${{ github.run_number }}"
+          echo "tag=${TAG_NAME}" >> $GITHUB_OUTPUT
+
+          # Find the generated release APK
+          APK_PATH=$(find app/build/outputs/apk/release -name "*.apk" | head -n 1)
+          if [ -z "$APK_PATH" ]; then
+            echo "::error::Release APK not found in app/build/outputs/apk/release/"
+            exit 1
+          fi
+
+          echo "Found APK: $APK_PATH"
+          mkdir -p release_assets
+          # Copy with fixed name for permanent direct latest download link
+          cp "$APK_PATH" release_assets/mapdroid.apk
+          # Copy with versioned name for archival
+          cp "$APK_PATH" "release_assets/mapdroid-${TAG_NAME}.apk"
+
+          echo "Listing release assets:"
+          ls -lh release_assets/
+
+      - name: Create GitHub Release and Upload APK
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.prep.outputs.tag }}
+          name: "Mapdroid Release ${{ steps.prep.outputs.tag }}"
+          body: |
+            ## 🗺️ Mapdroid Release ${{ steps.prep.outputs.tag }}
+
+            Aplikasi Android Peta Vektor berbasis **[MapLibre Native](https://maplibre.org)**.
+
+            ### 📥 Unduh File APK Langsung:
+            - 🚀 **[Download mapdroid.apk (Terbaru)](https://github.com/${{ github.repository }}/releases/download/${{ steps.prep.outputs.tag }}/mapdroid.apk)**
+            - 📦 **[Download mapdroid-${{ steps.prep.outputs.tag }}.apk](https://github.com/${{ github.repository }}/releases/download/${{ steps.prep.outputs.tag }}/mapdroid-${{ steps.prep.outputs.tag }}.apk)**
+
+            ---
+            ### ℹ️ Detail Build:
+            - **Versi Tag**: `${{ steps.prep.outputs.tag }}`
+            - **Commit SHA**: `${{ github.sha }}`
+            - **Branch**: `${{ github.ref_name }}`
+            - **Waktu Build**: ${{ github.event.head_commit.timestamp || github.run_id }}
+            - **Tipe Build**: Release APK (Signed dengan Android keystore, siap di-install)
+            - **Engine Peta**: MapLibre Native SDK (OpenGL / Vulkan)
+
+            ### 📱 Cara Instalasi di HP Android:
+            1. Unduh file `mapdroid.apk` di atas.
+            2. Buka file `.apk` melalui file manager atau notifikasi download.
+            3. Jika muncul dialog izin *"Install unknown apps"*, aktifkan izin untuk browser/file manager.
+            4. Pilih **Install / Pasang** dan tunggu hingga selesai.
+          files: |
+            release_assets/mapdroid.apk
+            release_assets/mapdroid-${{ steps.prep.outputs.tag }}.apk
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
